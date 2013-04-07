@@ -1,0 +1,261 @@
+BODY
+{
+	color: #2F2F2F;
+	background-color: #FEFEFE;
+	margin-left: #330000;
+}
+div.header
+{
+	color: #FFFFFF;
+	background-color: #2F2F2F;
+	text-align: center
+}
+div.footer
+{
+	color: #FFFFFF;
+	background-color: #2F2F8F;
+	text-align: center
+}
+div.menu
+{
+	color: #FFFFFF;
+	background-color: #2F2F2F;
+	text-align: left;
+}
+div.main_area
+{
+	width: 80%;
+}
+table.header_table
+{
+	color: #FFFFFF;
+	background-color: #2F2F2F;
+	width: 97%;
+	border: 0;
+	border-spacing: 0px;
+}
+td.logo
+{
+	color: #FFFFFF;
+	background-color: #2F2F2F;
+	width: 40%;
+	text-align: left;
+}
+td.login_info
+{
+	color: #FFFFFF;
+	background-color: #2F2F2F;
+	text-align: right;
+	text-valign: bottom;
+}
+td.disableitem
+{
+	color: #DDDDDD;
+	background-color: #888888;
+}
+td.calendar
+{
+	width: 12%;
+	vertical-align: top;
+}
+td.calendardisable
+{
+	width: 12%;
+	test-valign: top;
+	color: 888888#;
+	background-color: #CCCCCC;
+}
+table.content_table
+{
+	color: #2F2F2F;
+	background-color: #F1F1F1;
+	text-align: center;
+	width: 80%;
+	border: 2px solid #2F2F2F;
+	border-spacing: 2px;
+	border-collapse: collapse;
+}
+
+td.during_offer
+{
+	color: #2F2F2F;
+	background-color: #FFFFF1;
+	text-align: center;
+}
+
+td.offer_transfer
+{
+	color: #2F2F2F;
+	background-color: #e0e0f0;
+	text-align: center;
+}
+
+td.offer_end
+{
+	color: #2F2F2F;
+	background-color: #d0d0d0;
+	text-align: center;
+}
+
+td.team_result_winlose
+{
+	color: #2F2F2F;
+	background-color: #FFFFF1;
+	text-align: center;
+}
+
+td.team_data
+{
+	color: #2F2F2F;
+	background-color: #F1F1FF;
+	text-align: center;
+	width: 11%;
+}
+
+td.team_name
+{
+	color: #2F2F2F;
+	background-color: #F1FFF1;
+	text-align: center;
+	width: 11%;
+}
+
+td.inning_header
+{
+	color: #2F2F2F;
+	background-color: #F1FFF1;
+	text-align: center;
+}
+
+td.inning_team_name
+{
+	color: #2F2F2F;
+	background-color: #FFFFF1;
+	text-align: center;
+}
+
+td.inning_team_name_15
+{
+	color: #2F2F2F;
+	background-color: #FFFFF1;
+	text-align: center;
+	width: 15%;
+}
+
+tr, td
+{
+	color: #0F0F0F;
+	background-color: #F4F4F4;
+	text-align: center;
+	border: 1px solid #2F2F2F;
+}
+td.title
+{
+	font: italic bold 100%/150% serif;
+	width: 10%;
+	padding: 1px 10px;
+}
+td.id
+{
+	font: bold 100%/150% serif;
+	width: 10%;
+}
+td.nowrap
+{
+	white-space: nowrap;
+	padding: 1px 10px;
+}
+td.left
+{
+	border: 0px solid #FEFEFE;
+	text-align: left;
+	width: 50%;
+}
+td.right
+{
+	border: 0px solid #FEFEFE;
+	text-align: right;
+	width: 50%;
+}
+td.text_left
+{
+	text-align: left;
+}
+td.text_right
+{
+	text-align: right;
+}
+td.width_15
+{
+	width:15%;
+}
+td.width_20
+{
+	width:20%;
+}
+td.num_value
+{
+	text-align: right;
+}
+table.inner_table
+{
+	color: #2F2F2F;
+	background-color: #F1F1F1;
+	text-align: center;
+	width: 100%;
+	border: 1px solid #2F2F2F;
+	border-spacing: 1px;
+	border-collapse: collapse;
+}
+h2.title
+{
+	color: #2F2F2F;
+	font: bold 200%/200% serif;
+}
+h2.message
+{
+	color: #2F2F2F;
+	font: bold 100%/100% serif;
+}
+h3.title
+{
+	color: #2F2F2F;
+	font: bold 150%/150% serif;
+}
+h3.message
+{
+	color: #2F2F2F;
+	font: bold 100%/100% serif;
+}
+a.menu
+{
+	color: #FAE69C;
+}
+a.button_image
+{
+	color: #ECE9DB;
+}
+input.ime_off
+{
+	ime-mode: disabled;
+}
+input.input_num
+{
+	width: 80px;
+	text-align: right;
+}
+span.linkDisable
+{
+    color: gray;
+}
+
+hr.sub_contents
+{
+	width:90%;
+}
+
+input.ining
+{
+	ime-mode: disabled;
+}
+
