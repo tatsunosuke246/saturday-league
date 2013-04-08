@@ -32,6 +32,9 @@ define( "GAME_SCHEDULE_STATUS_4", 4);//中止
 define( "GAME_SCHEDULE_STATUS_5", 5);//譲渡
 define( "GAME_SCHEDULE_STATUS_6", 6);//募集終了
 
+define( "DATE_LIST_TYPE_ASC" , 1);//日付の古い順
+define( "DATE_LIST_TYPE_DESC", 2);//日付の新しい順
+
 
 class ScheduleDao extends BaseDao
 {
@@ -192,62 +195,72 @@ class ScheduleDao extends BaseDao
 	/**
 	 * スケジュールを検索(部で検索)
 	 *
-	 * @param int 		$game_list_type		検索種別(GAME_LIST_TYPE_X)
-	 * @param date 		$belong_list_type 	検索対象の部(BELONG_LIST_TYPE_X)
+	 * @param int 		$game_list_type			検索種別(GAME_LIST_TYPE_X)
+	 * @param int 		$game_dateorder_type 	検索日付順(DATE_LIST_TYPE_X)
+	 * @param int 		$belong_list_type 		検索対象の部(BELONG_LIST_TYPE_X)
 	 * 
 	 * @retval null以外 スケジュール配列(smarty向け形式)
 	 * @retval null 	処理失敗
 	 */
-	public function GetGameList( $game_list_type, $belong_list_type )
+	public function GetGameList( $game_list_type, $game_dateorder_type, $belong_list_type )
 	{
 		if( $belong_list_type == BELONG_LIST_TYPE_ALL )
 		{
 			if( $game_list_type == GAME_LIST_TYPE_ALL )
 			{
 				$query = 'SELECT * FROM '.$this->_table_name.
-				' WHERE DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				' WHERE DELETE_FLG = 0 ORDER BY GAME_DATE';
 			}
 			else if( $game_list_type == GAME_LIST_TYPE_1 )//試合予定( 募集中 + 対戦決定)
 			{
 				$query = 'SELECT * FROM '.$this->_table_name.
 				' WHERE ( GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_1.' OR GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_2.
-				' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 			}
 			else if( $game_list_type == GAME_LIST_TYPE_2 )//試合予定( 募集中のみ )
 			{
-				$query = 'SELECT * FROM '.$this->_table_name.' WHERE GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_1.' AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				$query = 'SELECT * FROM '.$this->_table_name.' WHERE GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_1.' AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 			}
 			else if( $game_list_type == GAME_LIST_TYPE_3 )//試合予定( 対戦決定のみ )
 			{
-				$query = 'SELECT * FROM '.$this->_table_name.' WHERE GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_2.' AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				$query = 'SELECT * FROM '.$this->_table_name.' WHERE GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_2.' AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 			}
 			else if( $game_list_type == GAME_LIST_TYPE_4 )//終了( 消化 + 中止 )
 			{
 				$query = 'SELECT * FROM '.$this->_table_name.
 				' WHERE ( GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_3.' OR GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_4.
-				' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 			}
 			else if( $game_list_type == GAME_LIST_TYPE_5 )//終了( 消化のみ )
 			{
-				$query = 'SELECT * FROM '.$this->_table_name.' WHERE GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_3.' AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				$query = 'SELECT * FROM '.$this->_table_name.' WHERE GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_3.' AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 			}
 			else if( $game_list_type == GAME_LIST_TYPE_6 )//終了( 中止のみ )
 			{
-				$query = 'SELECT * FROM '.$this->_table_name.' WHERE GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_4.' AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				$query = 'SELECT * FROM '.$this->_table_name.' WHERE GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_4.' AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 			}
 			else if( $game_list_type == GAME_LIST_TYPE_7 )//未設定( 譲渡 + 募集終了 )
 			{
 				$query = 'SELECT * FROM '.$this->_table_name.
 				' WHERE ( GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_5.' OR GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_6.
-				' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 			}
 			else if( $game_list_type == GAME_LIST_TYPE_8 )//未設定( 譲渡のみ )
 			{
-				$query = 'SELECT * FROM '.$this->_table_name.' WHERE GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_5.' AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				$query = 'SELECT * FROM '.$this->_table_name.' WHERE GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_5.' AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 			}
 			else if( $game_list_type == GAME_LIST_TYPE_9 )//未設定( 募集終了のみ )
 			{
-				$query = 'SELECT * FROM '.$this->_table_name.' WHERE GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_6.' AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				$query = 'SELECT * FROM '.$this->_table_name.' WHERE GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_6.' AND DELETE_FLG = 0 ORDER BY GAME_DATE';
+			}
+			
+			if( $game_dateorder_type == DATE_LIST_TYPE_ASC )
+			{
+				$query .= ' ASC';
+			}
+			else
+			{
+				$query .= ' DESC';
 			}
 		}
 		else
@@ -255,49 +268,58 @@ class ScheduleDao extends BaseDao
 			if( $game_list_type == GAME_LIST_TYPE_ALL )
 			{
 				$query = 'SELECT * FROM '.$this->_table_name.
-				' WHERE BELONG_NUMBER = '.$belong_list_type.' AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				' WHERE BELONG_NUMBER = '.$belong_list_type.' AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 			}
 			else if( $game_list_type == GAME_LIST_TYPE_1 )//試合予定( 募集中 + 対戦決定)
 			{
 				$query = 'SELECT * FROM '.$this->_table_name.
 				' WHERE BELONG_NUMBER = '.$belong_list_type.' AND ( GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_1.' OR GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_2.
-				' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 			}
 			else if( $game_list_type == GAME_LIST_TYPE_2 )//試合予定( 募集中のみ )
 			{
-				$query = 'SELECT * FROM '.$this->_table_name.' WHERE BELONG_NUMBER = '.$belong_list_type.' AND GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_1.' AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				$query = 'SELECT * FROM '.$this->_table_name.' WHERE BELONG_NUMBER = '.$belong_list_type.' AND GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_1.' AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 			}
 			else if( $game_list_type == GAME_LIST_TYPE_3 )//試合予定( 対戦決定のみ )
 			{
-				$query = 'SELECT * FROM '.$this->_table_name.' WHERE BELONG_NUMBER = '.$belong_list_type.' AND GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_2.' AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				$query = 'SELECT * FROM '.$this->_table_name.' WHERE BELONG_NUMBER = '.$belong_list_type.' AND GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_2.' AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 			}
 			else if( $game_list_type == GAME_LIST_TYPE_4 )//終了( 消化 + 中止 )
 			{
 				$query = 'SELECT * FROM '.$this->_table_name.
 				' WHERE BELONG_NUMBER = '.$belong_list_type.' AND ( GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_3.' OR GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_4.
-				' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 			}
 			else if( $game_list_type == GAME_LIST_TYPE_5 )//終了( 消化のみ )
 			{
-				$query = 'SELECT * FROM '.$this->_table_name.' WHERE BELONG_NUMBER = '.$belong_list_type.' AND GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_3.' AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				$query = 'SELECT * FROM '.$this->_table_name.' WHERE BELONG_NUMBER = '.$belong_list_type.' AND GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_3.' AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 			}
 			else if( $game_list_type == GAME_LIST_TYPE_6 )//終了( 中止のみ )
 			{
-				$query = 'SELECT * FROM '.$this->_table_name.' WHERE BELONG_NUMBER = '.$belong_list_type.' AND GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_4.' AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				$query = 'SELECT * FROM '.$this->_table_name.' WHERE BELONG_NUMBER = '.$belong_list_type.' AND GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_4.' AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 			}
 			else if( $game_list_type == GAME_LIST_TYPE_7 )//未設定( 譲渡 + 募集終了 )
 			{
 				$query = 'SELECT * FROM '.$this->_table_name.
 				' WHERE BELONG_NUMBER = '.$belong_list_type.' AND ( GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_5.' OR GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_6.
-				' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 			}
 			else if( $game_list_type == GAME_LIST_TYPE_8 )//未設定( 譲渡のみ )
 			{
-				$query = 'SELECT * FROM '.$this->_table_name.' WHERE BELONG_NUMBER = '.$belong_list_type.' AND GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_5.' AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				$query = 'SELECT * FROM '.$this->_table_name.' WHERE BELONG_NUMBER = '.$belong_list_type.' AND GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_5.' AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 			}
 			else if( $game_list_type == GAME_LIST_TYPE_9 )//未設定( 募集終了のみ )
 			{
-				$query = 'SELECT * FROM '.$this->_table_name.' WHERE BELONG_NUMBER = '.$belong_list_type.' AND GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_6.' AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+				$query = 'SELECT * FROM '.$this->_table_name.' WHERE BELONG_NUMBER = '.$belong_list_type.' AND GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_6.' AND DELETE_FLG = 0 ORDER BY GAME_DATE';
+			}
+
+			if( $game_dateorder_type == DATE_LIST_TYPE_ASC )
+			{
+				$query .= ' ASC';
+			}
+			else
+			{
+				$query .= ' DESC';
 			}
 		}
 
@@ -381,13 +403,14 @@ class ScheduleDao extends BaseDao
 	/**
 	 * スケジュールを取得(チームで検索)
 	 *
-	 * @param int 		$game_list_type		検索種別(GAME_LIST_TYPE_X)
-	 * @param int 		$team_id 			検索対象のチームID
+	 * @param int 		$game_list_type			検索種別(GAME_LIST_TYPE_X)
+	 * @param int 		$game_dateorder_type 	検索日付順(DATE_LIST_TYPE_X)
+	 * @param int 		$team_id 				検索対象のチームID
 	 * 
 	 * @retval null以外 スケジュール配列(smarty向け形式)
 	 * @retval null 	処理失敗
 	 */
-	public function GetGameListFromTeamid( $game_list_type, $team_id )
+	public function GetGameListFromTeamid( $game_list_type, $game_dateorder_type, $team_id )
 	{
 		$query = '';
 
@@ -395,64 +418,73 @@ class ScheduleDao extends BaseDao
 		{
 			$query = 'SELECT * FROM '.$this->_table_name.
 			' WHERE ( TEAM_ID_1 = '.$team_id.' OR TEAM_ID_2 = '.$team_id.
-			' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+			' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 		}
 		else if( $game_list_type == GAME_LIST_TYPE_1 )//試合予定( 募集中 + 対戦決定)
 		{
 			$query = 'SELECT * FROM '.$this->_table_name.
 			' WHERE ( GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_1.' OR GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_2.
 			' ) AND ( TEAM_ID_1 = '.$team_id.' OR TEAM_ID_2 = '.$team_id.
-			' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+			' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 		}
 		else if( $game_list_type == GAME_LIST_TYPE_2 )//試合予定( 募集中のみ )
 		{
 			$query = 'SELECT * FROM '.$this->_table_name.' WHERE GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_1.
 			' AND ( TEAM_ID_1 = '.$team_id.' OR TEAM_ID_2 = '.$team_id.
-			' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+			' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 		}
 		else if( $game_list_type == GAME_LIST_TYPE_3 )//試合予定( 対戦決定のみ )
 		{
 			$query = 'SELECT * FROM '.$this->_table_name.' WHERE GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_2.
 			' AND ( TEAM_ID_1 = '.$team_id.' OR TEAM_ID_2 = '.$team_id.
-			' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+			' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 		}
 		else if( $game_list_type == GAME_LIST_TYPE_4 )//終了( 消化 + 中止 )
 		{
 			$query = 'SELECT * FROM '.$this->_table_name.
 			' WHERE ( GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_3.' OR GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_4.
 			' ) AND ( TEAM_ID_1 = '.$team_id.' OR TEAM_ID_2 = '.$team_id.
-			' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+			' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 		}
 		else if( $game_list_type == GAME_LIST_TYPE_5 )//終了( 消化のみ )
 		{
 			$query = 'SELECT * FROM '.$this->_table_name.' WHERE GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_3.
 			' AND ( TEAM_ID_1 = '.$team_id.' OR TEAM_ID_2 = '.$team_id.
-			') AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+			') AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 		}
 		else if( $game_list_type == GAME_LIST_TYPE_6 )//終了( 中止のみ )
 		{
 			$query = 'SELECT * FROM '.$this->_table_name.' WHERE GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_4.
 			' AND ( TEAM_ID_1 = '.$team_id.' OR TEAM_ID_2 = '.$team_id.
-			') AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+			') AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 		}
 		else if( $game_list_type == GAME_LIST_TYPE_7 )//未設定( 譲渡 + 募集終了 )
 		{
 			$query = 'SELECT * FROM '.$this->_table_name.
 			' WHERE ( GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_5.' OR GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_6.
 			' ) AND ( TEAM_ID_1 = '.$team_id.' OR TEAM_ID_2 = '.$team_id.
-			' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+			' ) AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 		}
 		else if( $game_list_type == GAME_LIST_TYPE_8 )//未設定( 譲渡のみ )
 		{
 			$query = 'SELECT * FROM '.$this->_table_name.' WHERE GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_5.
 			' AND ( TEAM_ID_1 = '.$team_id.' OR TEAM_ID_2 = '.$team_id.
-			') AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+			') AND DELETE_FLG = 0 ORDER BY GAME_DATE';
 		}
 		else if( $game_list_type == GAME_LIST_TYPE_9 )//未設定( 募集終了のみ )
 		{
 			$query = 'SELECT * FROM '.$this->_table_name.' WHERE GAME_SCHEDULE_STATUS = '.GAME_SCHEDULE_STATUS_6.
 			' AND ( TEAM_ID_1 = '.$team_id.' OR TEAM_ID_2 = '.$team_id.
-			') AND DELETE_FLG = 0 ORDER BY GAME_DATE DESC';
+			') AND DELETE_FLG = 0 ORDER BY GAME_DATE';
+		}
+
+		if( $game_dateorder_type == DATE_LIST_TYPE_ASC )
+		{
+			$query .= ' ASC';
+		}
+		else
+		{
+			$query .= ' DESC';
 		}
 
 		$durning_offser_game = null;

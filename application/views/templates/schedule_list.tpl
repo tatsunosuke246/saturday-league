@@ -11,7 +11,8 @@
 
 <table class="content_table">
 <tr>
-<td>--</td>
+<td>検索方式</td>
+<td>日付順</td>
 <td colspan = "2">
 {{$game_list_search_type_radio}}
 </td>
@@ -19,6 +20,7 @@
 
 <tr>
 <td>{{$game_list_options}}</td>
+<td>{{$game_dateorder_type_options}}</td>
 <td>{{$belong_list_options}}</td>
 <td>{{$game_list_team__options}}</td>
 </tr>

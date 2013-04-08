@@ -14,6 +14,7 @@ class SchedulelistController extends BaseController
 	private $_paramname_select_belong_type = 'select_belong_type';
 	private $_paramname_select_game_list_search_type = 'select_game_list_search_type';
 	private $_paramname_select_game_list_team = 'select_game_list_team';
+	private $_paramname_select_game_date_order = 'select_date_order';
 
 	//!
 	//! @brief indexアクション
@@ -25,6 +26,7 @@ class SchedulelistController extends BaseController
 		$session = parent::GetAppSession();
 
 		$session->game_list_type = GAME_LIST_TYPE_1;
+		$session->game_dateorder_type = DATE_LIST_TYPE_DESC;
 		$session->belong_list_type = BELONG_LIST_TYPE_ALL;
 		$session->game_list_search_type = 1;
 		$session->game_list_team_id = 1;
@@ -42,6 +44,7 @@ class SchedulelistController extends BaseController
 		$session = parent::GetAppSession();
 
 		$session->game_list_type = $this->getRequest()->getParam( $this->_paramname_select_game_list_type );
+		$session->game_dateorder_type = $this->getRequest()->getParam( $this->_paramname_select_game_date_order );
 		$session->belong_list_type = $this->getRequest()->getParam( $this->_paramname_select_belong_type );
 		$session->game_list_search_type = $this->getRequest()->getParam( $this->_paramname_select_game_list_search_type );
 		$session->game_list_team_id = $this->getRequest()->getParam( $this->_paramname_select_game_list_team );
@@ -66,6 +69,12 @@ class SchedulelistController extends BaseController
 		$game_list_options = $this->getGameListOptions( $game_list_type );
 		$smarty->assign( "game_list_options", $game_list_options );
 
+		// ソート日付順選択
+		$game_dateorder_type = $session->game_dateorder_type;
+		$smarty->assign( "game_dateorder_type", $game_dateorder_type );
+		$game_dateorder_type_options = $this->getDateOrderOptions( $game_dateorder_type );
+		$smarty->assign( "game_dateorder_type_options", $game_dateorder_type_options );
+
 		//部形式orチーム形式選択
 		$game_list_search_type = $session->game_list_search_type;
 		$smarty->assign( "game_list_search_type", $game_list_search_type );
@@ -89,13 +98,13 @@ class SchedulelistController extends BaseController
 		if( $session->game_list_search_type == 1 )
 		{
 			//部単位で検索
-			$game_list = $schedule_dao->GetGameList( $game_list_type, $belong_list_type );
+			$game_list = $schedule_dao->GetGameList( $game_list_type, $game_dateorder_type, $belong_list_type );
 		}
 		else
 		{
 			//チーム単位で検索
 			$team_id = $this->getRequest()->getParam( $this->_paramname_select_game_list_team );
-			$game_list = $schedule_dao->GetGameListFromTeamid( $game_list_type, $team_id );
+			$game_list = $schedule_dao->GetGameListFromTeamid( $game_list_type, $game_dateorder_type, $team_id );
 		}
 
 		if( 0 < count( $game_list['id'] ) )
@@ -114,7 +123,7 @@ class SchedulelistController extends BaseController
 			$smarty->assign( "array_game_date", $array_game_date );
 */
 			$smarty->assign( "array_game_date", $game_list['date'] );
-			
+
 			//開始時間・終了時間
 			for( $cnt = 0 ; $cnt < count( $game_list['game_start_time'] ) ; $cnt++ )
 			{
@@ -318,5 +327,13 @@ class SchedulelistController extends BaseController
 		return FormUtil::getSelectOptions( $this->_paramname_select_game_list_team, $array_team_list, $selected );
 	}
 
+	public function getDateOrderOptions( $selected = 0 )
+	{
+		$array_game_type = array(
+									DATE_LIST_TYPE_ASC  => "日付が古い順で表示",
+									DATE_LIST_TYPE_DESC => "日付が新しい順で表示" );
+
+		return FormUtil::getSelectOptions( $this->_paramname_select_game_date_order, $array_game_type, $selected );
+	}
 
 }
